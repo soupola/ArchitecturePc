@@ -71,7 +71,23 @@ public class Partie1 {
         show("à la case : "+tableNoeud[0][1].cout);
     }
  
-   
+   public void findChildrenUC(int dep, int arrivée)
+   {
+       ArrayList<Noeud> enfant = new ArrayList<>();
+       for(int i = 0 ; i<13; i++)
+       {
+           if(tableNoeud[dep-1][i].getCout()!= -1)
+           {
+               tableNoeud[dep-1][i].setNom(Integer.toString(i+1));
+              /* show("cout : "+tableNoeud[dep-1][i].getCout());
+               show("heuristique : "+tableNoeud[dep-1][i].getHeuristique());
+               show("X : "+tableNoeud[dep-1][i].getX());
+               show("Y : "+tableNoeud[dep-1][i].getY());*/
+               enfant.add(tableNoeud[dep-1][i]);
+           } 
+       }
+       Collections.sort(enfant,Noeud.NoeudHeur);   
+   }
    
    public void greedySearch()
    {
@@ -193,7 +209,7 @@ public class Partie1 {
                
            } 
        }
-        Collections.sort(enfant);         
+        Collections.sort(enfant,Noeud.NoeudHeur);         
        /* show("contenu des la liste d'enfant");
         for(Noeud str : enfant)
         {

@@ -5,11 +5,13 @@
  */
 package partie1;
 
+import java.util.Comparator;
+
 /**
  *
  * @author Gilles
  */
-public class Noeud implements Comparable<Noeud> {
+public class Noeud{
 String nom;
 int X;
 int Y;
@@ -62,23 +64,45 @@ int cout;
      public void setCout(int cout) {
         this.cout = cout;
     }
-    @Override
+    /*@Override
     public int compareTo(Noeud comparestu) {
         int compareHeur=((Noeud)comparestu).getHeuristique();
 
         //return this.heuristique-compareHeur;
 
         return compareHeur-this.heuristique;
-    }
+    }*/
      
-    public int compareTo(Noeud node , Noeud lol) {
-        int compareCout=((Noeud)node).getCout();
+     public static Comparator<Noeud> NoeudHeur = new Comparator<Noeud>() {
 
-        //return this.heuristique-compareHeur;
+	public int compare(Noeud s1, Noeud s2) 
+        {
 
-        return compareCout-this.heuristique;
-    }
+	   int heur1  = s1.getHeuristique();
+	   int heur2  = s2.getHeuristique();
 
+	   /*For ascending order*/
+	   return heur2-heur1;
+
+	   /*For descending order*/
+	   //rollno2-rollno1;
+        }  
+};
+     
+     public static Comparator<Noeud> NoeudCost = new Comparator<Noeud>() {
+
+	public int compare(Noeud s1, Noeud s2) {
+
+	   int cost1 = s1.getCout();
+	   int cost2 = s2.getCout();
+
+	   /*For ascending order*/
+	   return cost2-cost1;
+
+	   /*For descending order*/
+	   //rollno2-rollno1;
+   }};
+   
     
 
     
