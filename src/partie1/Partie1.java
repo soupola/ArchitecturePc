@@ -38,7 +38,7 @@ public class Partie1 {
         obj.readCSV();
         //obj.nds();
        // obj.dfs();
-        obj.findChildrenGreedySearch(2, 13);
+        obj.greedySearch();
        // obj.showCsv();
         
         
@@ -59,7 +59,7 @@ public class Partie1 {
                 for(int i = 0; i<13;i++)
                 {
                     tableString[y][i]=splitTable[i];
-                    tableNoeud[y][i]= new Noeud(0, Integer.parseInt(splitTable[i]),y,i,0);
+                    tableNoeud[y][i]= new Noeud(0, Integer.parseInt(splitTable[i]),y,i,"0");
                 }
                 y++;                
             }
@@ -71,10 +71,12 @@ public class Partie1 {
         show("à la case : "+tableNoeud[0][1].cout);
     }
  
+   
+   
    public void greedySearch()
    {
        ArrayList<String> queue = new ArrayList<>();
-       ArrayList<Integer> enfant = new ArrayList<>();
+       ArrayList<Noeud> enfant = new ArrayList<>();
        
        
        Boolean firstPass = true;
@@ -89,37 +91,18 @@ public class Partie1 {
            if(firstPass)
            {
             enfant= findChildrenGreedySearch(depart,arrivee);
-            
-
             for(int x=0; x<enfant.size();x++)
             {
-             
-             
-             
-             if(debugDfs)
-             {
-                show(x+"eme element de la liste enfant sur "+enfant.size());
-                show(enfant.get(x));
-             }
-
-
-             queue.add(queue.get(0)+"/"+enfant.get(x));
-
-
+                queue.add(queue.get(0)+"/"+enfant.get(x).getNom());
             }
-            
-            if(debugDfs)
+            queue.remove(0);
+            show("éléments de la queue");
+            for(int y =0 ; y<queue.size(); y++ )
             {
-                show("nombre d'élément de queue : "+queue.size());
-                show("affiche les éléments de la queue: ");
-                for(int y =0; y<queue.size() ;y++)
-                {
-                    show(queue.get(y));
-                }
-
+                show(queue.get(y));
             }
-           
-           firstPass=false;
+            firstPass=false;
+            
         }
         
         else
@@ -133,10 +116,12 @@ public class Partie1 {
                 {
                     goal=true;
                 }
+
             }
             if(!goal)
             {
-            enfant= findChildren(Integer.parseInt(tempTab[tempTab.length-1]));
+            show(tempTab[tempTab.length-1]);
+            enfant= findChildrenGreedySearch(Integer.parseInt(tempTab[tempTab.length-1]),arrivee);
             int varPos = 1;
             //show("Est ce "+tempTab[tempTab.length-1]+" == "+arrivee+" ?");
             if(!tempTab[tempTab.length-1].equals(Integer.toString(arrivee)))
@@ -149,9 +134,9 @@ public class Partie1 {
                     {
                       check.add(tempTab[z]);
                     }
-                  // if(check.add(enfant.get(x-1)))
+                   if(check.add(enfant.get(x-1).getNom()))
                     {
-                        queue.add(varPos,queue.get(0)+"/"+enfant.get(x-1));
+                        queue.add(varPos,queue.get(0)+"/"+enfant.get(x-1).getNom());
                         //queue.add(x, "bite");
                         //show(enfant.get(x-1));
                         varPos++;
@@ -173,14 +158,14 @@ public class Partie1 {
         }
         profondeur++;
        }
-       show("le chemin meilleur chemin trouvé par DFS est : "+queue.get(0));
+       show("le chemin meilleur chemin trouvé par greedy search est : "+queue.get(0));
        show("le chemin a été trouvé en "+profondeur+" coups ");
        
    }
    
-   public float heuristique(int dep, int fin)
+   public int heuristique(int dep, int fin)
    {
-       float heuristique = (float) sqrt((dep*dep)+(fin*fin));
+       int heuristique = (int)sqrt(((dep*2)*(dep*3))+((2*fin)*(3*fin)));
        return heuristique;
    }
    
@@ -198,23 +183,23 @@ public class Partie1 {
            if(tableNoeud[dep-1][i].getCout()!= -1)
            {
                tableNoeud[dep-1][i].setHeuristique(heuristique(i, fin));
-               tableNoeud[dep-1][i].setNom(i+1);
-               show("cout : "+tableNoeud[dep-1][i].getCout());
+               tableNoeud[dep-1][i].setNom(Integer.toString(i+1));
+              /* show("cout : "+tableNoeud[dep-1][i].getCout());
                show("heuristique : "+tableNoeud[dep-1][i].getHeuristique());
                show("X : "+tableNoeud[dep-1][i].getX());
-               show("Y : "+tableNoeud[dep-1][i].getY());
+               show("Y : "+tableNoeud[dep-1][i].getY());*/
                enfant.add(tableNoeud[dep-1][i]);
               
                
            } 
        }
         Collections.sort(enfant);         
-        show("contenu des la liste d'enfant");
+       /* show("contenu des la liste d'enfant");
         for(Noeud str : enfant)
         {
             System.out.println(str.getNom());
         }
-       
+       */
        return enfant;
    }
    
