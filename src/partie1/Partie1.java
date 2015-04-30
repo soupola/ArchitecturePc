@@ -38,7 +38,7 @@ public class Partie1 {
         obj.readCSV();
         //obj.nds();
        // obj.dfs();
-       // obj.greedySearch();
+       //obj.greedySearch();
        // obj.showCsv();
         obj.uniformCost();
         
@@ -119,16 +119,16 @@ public class Partie1 {
             {
                 show(queue.get(y).getNom()+" Avec un cout cumulé de "+queue.get(y).getCout());
             }
-            firstPass=true;
-            goal = true;
+            Collections.sort(queue,Noeud.NoeudCost);
+            firstPass=false;
         }
         
-       /* else
+       else
         {
             String tempTab[] = null;
             for(int dec = queue.size(); dec>0 ; dec -- )
             {
-                tempTab = queue.get(dec-1).split("/");
+                tempTab = queue.get(dec-1).getNom().split("/");
                 
                 if(queue.get(dec-1).equals(""+arrivee))
                 {
@@ -138,8 +138,7 @@ public class Partie1 {
             }
             if(!goal)
             {
-            show(tempTab[tempTab.length-1]);
-            enfant= findChildrenGreedySearch(Integer.parseInt(tempTab[tempTab.length-1]),arrivee);
+            enfant= findChildrenUC(Integer.parseInt(tempTab[tempTab.length-1]));
             int varPos = 1;
             //show("Est ce "+tempTab[tempTab.length-1]+" == "+arrivee+" ?");
             if(!tempTab[tempTab.length-1].equals(Integer.toString(arrivee)))
@@ -152,9 +151,10 @@ public class Partie1 {
                     {
                       check.add(tempTab[z]);
                     }
-                   if(check.add(Integer.toString(enfant.get(x-1).getNom())))
+                   if(check.add(enfant.get(x-1).getNom()))
                     {
-                        queue.add(varPos,queue.get(0)+"/"+enfant.get(x-1).getNom());
+                        Noeud additionnel = new Noeud(0, queue.get(0).getCout()+enfant.get(x-1).getCout(), 0, 0,queue.get(0).getNom()+"/"+enfant.get(x-1).getNom() );
+                        queue.add(additionnel);
                         //queue.add(x, "bite");
                         //show(enfant.get(x-1));
                         varPos++;
@@ -165,7 +165,7 @@ public class Partie1 {
                 show(profondeur+" ème passage");
                  for(int lol = 0; lol<queue.size();lol++)
                 {
-                    show(queue.get(lol));
+                    show(queue.get(lol).getNom());
                 }
             }
             else
@@ -176,9 +176,9 @@ public class Partie1 {
         }
         profondeur++;
        }
-       show("le chemin meilleur chemin trouvé par greedy search est : "+queue.get(0));
+       show("le chemin meilleur chemin trouvé par greedy search est : "+queue.get(0).getNom()+" avec un cout de : "+queue.get(0).getCout());
        show("le chemin a été trouvé en "+profondeur+" coups ");
-       */}
+       
    }
    public void greedySearch()
    {
@@ -209,6 +209,7 @@ public class Partie1 {
                 show(queue.get(y));
             }
             firstPass=false;
+
             
         }
         
@@ -296,11 +297,12 @@ public class Partie1 {
                show("X : "+tableNoeud[dep-1][i].getX());
                show("Y : "+tableNoeud[dep-1][i].getY());*/
                enfant.add(tableNoeud[dep-1][i]);
+               
               
                
            } 
        }
-        Collections.sort(enfant,Noeud.NoeudHeur);         
+        Collections.sort(enfant,Noeud.NoeudHeur);   
        /* show("contenu des la liste d'enfant");
         for(Noeud str : enfant)
         {

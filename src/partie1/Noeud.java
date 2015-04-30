@@ -97,7 +97,7 @@ int cout;
 	   int cost2 = s2.getCout();
 
 	   /*For ascending order*/
-	   return cost2-cost1;
+	   return cost1-cost2;
 
 	   /*For descending order*/
 	   //rollno2-rollno1;
