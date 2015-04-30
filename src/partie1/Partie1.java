@@ -38,8 +38,9 @@ public class Partie1 {
         obj.readCSV();
         //obj.nds();
        // obj.dfs();
-        obj.greedySearch();
+       // obj.greedySearch();
        // obj.showCsv();
+        obj.uniformCost();
         
         
     }
@@ -71,7 +72,7 @@ public class Partie1 {
         show("à la case : "+tableNoeud[0][1].cout);
     }
  
-   public void findChildrenUC(int dep, int arrivée)
+   public ArrayList findChildrenUC(int dep)
    {
        ArrayList<Noeud> enfant = new ArrayList<>();
        for(int i = 0 ; i<13; i++)
@@ -86,9 +87,99 @@ public class Partie1 {
                enfant.add(tableNoeud[dep-1][i]);
            } 
        }
-       Collections.sort(enfant,Noeud.NoeudHeur);   
+       return enfant;
    }
-   
+   public void uniformCost()
+   {
+       ArrayList<Noeud> queue = new ArrayList<>();
+       ArrayList<Noeud> enfant = new ArrayList<>();
+       
+       
+       Boolean firstPass = true;
+       Boolean goal = false;
+       
+       int depart = 1;
+       int arrivee = 13;
+       int profondeur= 0;
+       Noeud begin = new Noeud(0, 0, 0, 0,Integer.toString(depart));
+       queue.add(begin);
+       while(!goal && queue.size()>0)
+       {
+           if(firstPass)
+           {
+            enfant= findChildrenUC(depart);
+            for(int x=0; x<enfant.size();x++)
+            {
+                Noeud additionnel = new Noeud(0, queue.get(0).getCout()+enfant.get(x).getCout(), 0, 0,queue.get(0).getNom()+"/"+enfant.get(x).getNom() );
+                queue.add(additionnel);
+            }
+            queue.remove(0);
+            show("éléments de la queue");
+            for(int y =0 ; y<queue.size(); y++ )
+            {
+                show(queue.get(y).getNom()+" Avec un cout cumulé de "+queue.get(y).getCout());
+            }
+            firstPass=true;
+            goal = true;
+        }
+        
+       /* else
+        {
+            String tempTab[] = null;
+            for(int dec = queue.size(); dec>0 ; dec -- )
+            {
+                tempTab = queue.get(dec-1).split("/");
+                
+                if(queue.get(dec-1).equals(""+arrivee))
+                {
+                    goal=true;
+                }
+
+            }
+            if(!goal)
+            {
+            show(tempTab[tempTab.length-1]);
+            enfant= findChildrenGreedySearch(Integer.parseInt(tempTab[tempTab.length-1]),arrivee);
+            int varPos = 1;
+            //show("Est ce "+tempTab[tempTab.length-1]+" == "+arrivee+" ?");
+            if(!tempTab[tempTab.length-1].equals(Integer.toString(arrivee)))
+            {
+                for(int x = 1; x<enfant.size()+1;x++)
+                {
+
+                    HashSet<String> check = new HashSet<>();
+                    for(int z = 0; z<tempTab.length; z++)
+                    {
+                      check.add(tempTab[z]);
+                    }
+                   if(check.add(Integer.toString(enfant.get(x-1).getNom())))
+                    {
+                        queue.add(varPos,queue.get(0)+"/"+enfant.get(x-1).getNom());
+                        //queue.add(x, "bite");
+                        //show(enfant.get(x-1));
+                        varPos++;
+                    }
+                   
+                }
+                queue.remove(0);
+                show(profondeur+" ème passage");
+                 for(int lol = 0; lol<queue.size();lol++)
+                {
+                    show(queue.get(lol));
+                }
+            }
+            else
+            {
+                goal=true;
+            }
+        }
+        }
+        profondeur++;
+       }
+       show("le chemin meilleur chemin trouvé par greedy search est : "+queue.get(0));
+       show("le chemin a été trouvé en "+profondeur+" coups ");
+       */}
+   }
    public void greedySearch()
    {
        ArrayList<String> queue = new ArrayList<>();
