@@ -17,13 +17,23 @@ int X;
 int Y;
 int heuristique;
 int cout;
+int uniformCost;
 
-    public Noeud(int heuristique, int cout, int X,int Y, String nom) {
+    public Noeud(int heuristique, int cout, int X,int Y, String nom, int uniformCost) {
         this.X = X;
         this.Y = Y;
         this.nom = nom;
         this.heuristique= heuristique;
         this.cout = cout;
+        this.uniformCost= uniformCost;
+    }
+
+    public int getUniformCost() {
+        return uniformCost;
+    }
+
+    public void setUniformCost(int uniformCost) {
+        this.uniformCost = uniformCost;
     }
 
     public String getNom() {
@@ -89,12 +99,12 @@ int cout;
         }  
 };
      
-     public static Comparator<Noeud> NoeudCost = new Comparator<Noeud>() {
+     public static Comparator<Noeud> triUC = new Comparator<Noeud>() {
 
 	public int compare(Noeud s1, Noeud s2) {
 
-	   int cost1 = s1.getCout();
-	   int cost2 = s2.getCout();
+	   int cost1 = s1.getUniformCost();
+	   int cost2 = s2.getUniformCost();
 
 	   /*For ascending order*/
 	   return cost1-cost2;
